@@ -7,7 +7,7 @@ export interface IComment extends Document {
   questionReplies: IComment[];
 }
 
-interface IReview extends Document {
+export interface IReview extends Document {
   user: IUser;
   rating?: number;
   comment: string;
@@ -84,7 +84,7 @@ const courseDataSchema = new Schema<ICourseData>({
   questions: [commentSchema],
 });
 
-const courseSchema = new Schema<ICourse>({
+export const courseSchema = new Schema<ICourse>({
   name: {
     type: String,
     required: true,
