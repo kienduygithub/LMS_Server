@@ -11,6 +11,7 @@ import notificationRouter from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.route";
 import { rateLimit } from "express-rate-limit";
+import cartRouter from "./routes/cart.route";
 
 // body parser
 app.use(express.json({ limit: "50mb" }));
@@ -37,7 +38,8 @@ app.use(
   courseRouter,
   notificationRouter,
   analyticsRouter,
-  layoutRouter
+  layoutRouter,
+  cartRouter
 );
 
 // testing api
@@ -79,7 +81,7 @@ app.use(ErrorMiddleware);
 // //cookie parser
 // app.use(cookieParser());
 
-// //cors 
+// //cors
 // // app.use(cors(
 // //    {
 // //     origin: process.env.ORIGIN

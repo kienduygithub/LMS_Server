@@ -1,9 +1,10 @@
 import express from "express";
-import { authorizeRoles, isAutheticated } from "../middleware/auth";
+import { isAutheticated } from "../middleware/auth";
+import { getCartOfUser } from "../controllers/cart.controller";
 const cartRouter = express.Router();
 
 
-cartRouter.get("/get-cart", isAutheticated,);
+cartRouter.get("/get-cart", isAutheticated, getCartOfUser);
 
 // cartRouter.put("/add-cart", isAutheticated, getOrderAnalytics);
 
