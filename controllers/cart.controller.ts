@@ -34,7 +34,7 @@ export const addCourseToCart = CatchAsyncError(
                     new ErrorHandler("Bạn đã có khóa học này trong giỏ hàng", 400)
                 );
             }
-            user?.cart.unshift({ courseId: _id });
+            user?.cart.unshift({ courseId: _id.toString() });
             await user?.save();
             let courseIds = user?.cart.map((item) => item.courseId);
             let coursesInCart: ICourse[] = [];
