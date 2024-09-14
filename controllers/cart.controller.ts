@@ -48,3 +48,28 @@ export const addCourseToCart = CatchAsyncError(
         }
     }
 )
+
+export const removeCourseFromCart = CatchAsyncError(
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = await userModel.findById(req.user?._id).select("cart");
+            const { _id } = req.body as ICourse;
+            if (user?.cart) {
+                const existCourseInCart = user?.cart.some((item) => item.courseId === _id);
+                if (!existCourseInCart) {
+                    return next(new ErrorHandler("Khóa học không tồn tại trong giỏ hàng", 400));
+                }
+                let currCart = user.cart;
+                currCart = currCart.filter(item => item.courseId !== _id);
+                user.cart = currCart;
+                await user.save();
+            }
+            res.status(202).json({
+                success: true,
+                message: "Xóa khóa học khỏi giỏ hàng thành công"
+            })
+        } catch (error: any) {
+            return next(new ErrorHandler(error.message, 400));
+        }
+    }
+)
