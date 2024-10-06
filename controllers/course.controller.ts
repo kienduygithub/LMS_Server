@@ -507,7 +507,6 @@ export const generateVideoUrlMux = CatchAsyncError(
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              // Authorization: `Basic ${process.env.VDOCIPHER_API_SECRET}`,
               Authorization: `Basic ${token}`,
             },
           }
