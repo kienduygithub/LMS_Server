@@ -13,36 +13,6 @@ export const createLayout = CatchAsyncError(
       if (isTypeExist) {
         return next(new ErrorHandler(`${type} đã tồn tại`, 400));
       }
-      if (type === "Banner") {
-        const { image, title, subTitle } = req.body;
-        const myCloud = await cloudinary.v2.uploader.upload(image, {
-          folder: "layout",
-        });
-        const banner = {
-          type: "Banner",
-          banner: {
-            image: {
-              public_id: myCloud.public_id,
-              url: myCloud.secure_url,
-            },
-            title,
-            subTitle,
-          },
-        };
-        await LayoutModel.create(banner);
-      }
-      if (type === "FAQ") {
-        const { faq } = req.body;
-        const faqItems = await Promise.all(
-          faq.map(async (item: any) => {
-            return {
-              question: item.question,
-              answer: item.answer,
-            };
-          })
-        );
-        await LayoutModel.create({ type: "FAQ", faq: faqItems });
-      }
       if (type === "Categories") {
         const { categories } = req.body;
         const categoriesItems = await Promise.all(
@@ -81,8 +51,8 @@ export const editLayout = CatchAsyncError(
         const data = image.startsWith("https")
           ? bannerData
           : await cloudinary.v2.uploader.upload(image, {
-              folder: "layout",
-            });
+            folder: "layout",
+          });
 
         const banner = {
           type: "Banner",

@@ -16,7 +16,7 @@ import {
 } from "../services/user.service";
 import cloudinary from "cloudinary";
 
-// register user
+
 interface IRegistrationBody {
   name: string;
   email: string;
@@ -96,7 +96,7 @@ export const createActivationToken = (user: any): IActivationToken => {
   return { token, activationCode };
 };
 
-// activate user
+
 interface IActivationRequest {
   activation_token: string;
   activation_code: string;
@@ -139,7 +139,7 @@ export const activateUser = CatchAsyncError(
   }
 );
 
-// Login user
+
 interface ILoginRequest {
   email: string;
   password: string;
@@ -170,7 +170,7 @@ export const loginUser = CatchAsyncError(
   }
 );
 
-// logout user
+
 export const logoutUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -188,7 +188,7 @@ export const logoutUser = CatchAsyncError(
   }
 );
 
-// update access token
+
 export const updateAccessToken = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -241,7 +241,7 @@ interface ISocialAuthBody {
   avatar: string;
 }
 
-// social auth
+
 export const socialAuth = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -259,7 +259,7 @@ export const socialAuth = CatchAsyncError(
   }
 );
 
-// update user info
+
 interface IUpdateUserInfo {
   name?: string;
   email?: string;
@@ -291,7 +291,7 @@ export const updateUserInfo = CatchAsyncError(
   }
 );
 
-// update user password
+
 interface IUpdatePassword {
   oldPassword: string;
   newPassword: string;
@@ -338,7 +338,7 @@ interface IUpdateProfilePicture {
   avatar: string;
 }
 
-// update profile picture
+
 export const updateProfilePicture = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -349,9 +349,7 @@ export const updateProfilePicture = CatchAsyncError(
       const user = await userModel.findById(userId).select("+password");
 
       if (avatar && user) {
-        // if user have one avatar then call this if
         if (user?.avatar?.public_id) {
-          // first delete the old image
           await cloudinary.v2.uploader.destroy(user?.avatar?.public_id);
 
           const myCloud = await cloudinary.v2.uploader.upload(avatar, {
@@ -389,7 +387,7 @@ export const updateProfilePicture = CatchAsyncError(
   }
 );
 
-// get all users --- only for admin
+
 export const getAllUsers = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -400,7 +398,7 @@ export const getAllUsers = CatchAsyncError(
   }
 );
 
-// update user role --- only for admin
+
 export const updateUserRole = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -421,7 +419,6 @@ export const updateUserRole = CatchAsyncError(
   }
 );
 
-// Delete user --- only for admin
 export const deleteUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {

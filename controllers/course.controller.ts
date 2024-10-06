@@ -146,6 +146,7 @@ export const getCourseByUser = CatchAsyncError(
         (course: any) => course._id.toString() === courseId
       );
 
+
       if (!courseExists) {
         return next(
           new ErrorHandler("Bạn không đủ điều kiện để tham gia khóa học này", 404)
@@ -177,7 +178,7 @@ export const addQuestion = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { question, courseId, contentId }: IAddQuestionData = req.body;
-      
+
       const course = await CourseModel.findById(courseId);
 
       if (!mongoose.Types.ObjectId.isValid(contentId)) {
@@ -416,7 +417,7 @@ export const addReplyToReview = CatchAsyncError(
       }
 
       review.commentReplies?.push(replyData);
-      
+
       await course?.save();
 
       await redis.set(courseId, JSON.stringify(course), "EX", 604800); // 7days
@@ -478,12 +479,39 @@ export const generateVideoUrl = CatchAsyncError(
         { ttl: 300 },
         {
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            // Accept: "application/json",
+            // "Content-Type": "application/json",
             Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
           },
         }
       );
+      res.json(response.data);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+export const generateVideoUrlMux = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const username = "0ae39edb-e685-497f-8282-427d8b5e3d33";
+      const password = "y06pnukrHWP0I5/QWShpF/qS5w2JfB7W/MVDEzKq2GwiOBtjdcAkon38Kg8j+FYZS+X9w+F52uz";
+      const token = btoa(`${username}:${password}`);
+      const { videoId } = req.query;
+
+      let response =
+        await axios.get(
+          `https://api.mux.com/video/v1/assets/${videoId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              // Authorization: `Basic ${process.env.VDOCIPHER_API_SECRET}`,
+              Authorization: `Basic ${token}`,
+            },
+          }
+        );
       res.json(response.data);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
